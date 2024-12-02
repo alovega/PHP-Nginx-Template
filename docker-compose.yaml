@@ -1,0 +1,38 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 0egV5evuMEOyaeA
+      MYSQL_DATABASE: local
+      # MYSQL_USER: root
+      MYSQL_PASSWORD: 0egV5evuMEOyaeA
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      
+    networks:
+      - mysqlnetwork
+
+  phpmydmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql  # The hostname of the MySQL container
+      MYSQL_ROOT_PASSWORD: 0egV5evuMEOyaeA  # Use the root password defined above
+    ports:
+      - "8080:80"  # Expose pgAdmin to public
+    depends_on:
+      - mysql
+    networks:
+      - mysqlnetwork
+
+
+volumes:
+  mysql_data:
+
+networks:
+  mysqlnetwork:
+    driver: bridge
